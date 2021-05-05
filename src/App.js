@@ -1,23 +1,35 @@
-import logo from './logo.svg';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Route, Router, Switch } from 'react-router-dom';
 import './App.css';
+import { alertActions } from './redux-store/actions/alert-actions';
+import { history } from './utils/history';
+import DashboardComponent from './_components/dashboard';
+import LoginComponent from './_components/LoginComponent';
+import { PrivateRoute } from './_components/private-routes/PreivateRoute';
+
 
 function App() {
+  const alert = useSelector(state => state.alert);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    history.listen((location, action) => {
+      // clear alert on location change
+      dispatch(alertActions.clear());
+    });
+  }, [dispatch]);
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      {alert.message &&
+        <div className={`alert ${alert.type}`}> {alert.message} try again.</div>
+      }
+      <Router history={history}>
+        <Switch>
+          <PrivateRoute exact path="/" component={DashboardComponent} />
+          <Route exact path="/login" component={LoginComponent} />
+        </Switch>
+      </Router>
     </div>
   );
 }
