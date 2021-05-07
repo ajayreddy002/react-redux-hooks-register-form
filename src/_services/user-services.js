@@ -5,8 +5,8 @@ axios.defaults.headers = {
 }
 export const ApiMethods = {
     getAllUsers,
-    postRequest,
-    putRequest,
+    createUser,
+    updateUser,
     deleteRequest,
     login,
     register
@@ -49,11 +49,27 @@ async function getAllUsers(url){
         return err
     }
 }
-function postRequest(url, payLoad){
-    return axios.get(`${BASE_URL}/${url}`, payLoad);
+async function createUser(url, payLoad){
+    try {
+        const data = await axios.post(`${BASE_URL}/${url}`, payLoad);
+        if (data.status === 200 && data.data) {
+            console.log(data)
+            return data.data.data
+        }
+    } catch (err) {
+        return Promise.reject(err)
+    }
 }
-function putRequest(url, payLoad){
-    return axios.get(`${BASE_URL}/${url}`, payLoad);
+async function updateUser(url, payLoad){
+    try {
+        const data = await axios.put(`${BASE_URL}/${url}`, payLoad);
+        if (data.status === 200 && data.data) {
+            console.log(data)
+            return data.data.data
+        }
+    } catch (err) {
+        return Promise.reject(err)
+    }
 }
 function deleteRequest(url, payLoad){
     return axios.get(`${BASE_URL}/${url}`, payLoad);

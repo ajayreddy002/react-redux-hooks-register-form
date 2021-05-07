@@ -6,7 +6,9 @@ export const UserActions = {
     getAll,
     login,
     register,
-    logout
+    logout,
+    addUser,
+    updateUser
 }
 
 function login(endPoint, payLoad, from) {
@@ -43,9 +45,7 @@ function register(endPoint, user) {
         ApiMethods.register(endPoint, user)
             .then(
                 user => {
-                    dispatch(success());
-                    history.push('/login');
-                    window.location.reload();
+                    dispatch(success(user));
                 },
                 error => {
                     dispatch(failure(error.toString()));
@@ -58,7 +58,47 @@ function register(endPoint, user) {
     function success(user) { return { type: UserTypes.REGISTER_SUCCESS, user } }
     function failure(error) { return { type: UserTypes.REGISTER_FAILURE, error } }
 }
+function addUser(endPoint, payLoad) {
+    return dispatch => {
+        dispatch(request(payLoad));
 
+        ApiMethods.createUser(endPoint, payLoad)
+            .then(
+                payLoad => {
+                    dispatch(success(payLoad));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: UserTypes.ADD_REQUEST, user } }
+    function success(user) { return { type: UserTypes.ADD_SUCCESS, user } }
+    function failure(error) { return { type: UserTypes.ADD_FAILURE, error } }
+}
+
+function updateUser(endPoint, payLoad) {
+    return dispatch => {
+        dispatch(request(payLoad));
+
+        ApiMethods.createUser(endPoint, payLoad)
+            .then(
+                payLoad => {
+                    dispatch(success(payLoad));
+                },
+                error => {
+                    dispatch(failure(error.toString()));
+                    dispatch(alertActions.error(error.toString()));
+                }
+            );
+    };
+
+    function request(user) { return { type: UserTypes.ADD_REQUEST, user } }
+    function success(user) { return { type: UserTypes.ADD_SUCCESS, user } }
+    function failure(error) { return { type: UserTypes.ADD_FAILURE, error } }
+}
 function getAll(url) {
     return dispatch => {
         dispatch(request());

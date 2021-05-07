@@ -1,6 +1,7 @@
 import UserTypes from "../types/user-types";
 
 export function user(state = {}, action) {
+    console.log(action, 'reducer ')
     switch (action.type) {
         case UserTypes.GETALL_REQUEST:
             return {
@@ -11,6 +12,18 @@ export function user(state = {}, action) {
                 items: action.users
             };
         case UserTypes.GETALL_FAILURE:
+            return {
+                error: action.error
+            };
+        case UserTypes.ADD_REQUEST:
+            return {
+                loading: true
+            };
+        case UserTypes.ADD_SUCCESS:
+            return {
+                items: action.users
+            };
+        case UserTypes.ADD_FAILURE:
             return {
                 error: action.error
             };
